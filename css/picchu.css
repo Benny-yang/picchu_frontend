@@ -880,6 +880,9 @@ a.closeFBpop:hover div {
     background-position: top center;
     background-size: 100% 100%;
   }
+  .toApply.afterLogin {
+    bottom: 2.5rem;
+  }
 
   .m_eventInfo {
     width: 100%;
@@ -1415,4 +1418,3 @@ a.closeFBpop:hover div {
     top: 2.46rem;
   }
 }
-/*# sourceMappingURL=picchu.css.map */
