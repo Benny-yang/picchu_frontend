@@ -1,0 +1,2 @@
+Vm.component("main_content",{template:"#setting-content",props:["is_login"],emits:["update"],data:()=>({sidebarOpen:!1}),mounted(){_this=this},methods:{accountLogOut(){_this.$emit("update",!0)}},watch:{}});
+//# sourceMappingURL=setting.js.map

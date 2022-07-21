@@ -1,0 +1,2 @@
+Vm.component("main_content",{template:"#signin-content",data:()=>({swiper_photo:null}),mounted(){_this=this},methods:{photoPopUpShow(){$(_this.$refs.photoPup).stop(!0).fadeIn(450),_this.swiper_photo?_this.swiper_photo.virtual.update():_this.init_swiper()},close_photoPopUp(t){$(t.currentTarget).parents(".popUp").stop(!0).fadeOut(250)},init_swiper(){_this.swiper_photo=new Swiper(".photoSlider",{loop:!0,navigation:{nextEl:".swp_R",prevEl:".swp_L"}})}}});
+//# sourceMappingURL=signin.js.map

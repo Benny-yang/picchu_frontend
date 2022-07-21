@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>PICCHU</title>
+    <!-- SEO-->
+    <meta name="title" content="PICCHU">
+    <meta name="description" content="PICCHU">
+    <!-- facebook-->
+    <meta property="og:title" content="PICCHU">
+    <meta property="og:description" content="PICCHU">
+    <meta property="og:image" content="./images/fb.jpg">
+    <meta property="og:url" content="./">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PICCHU">
+    <!-- favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <!-- css-->
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <script src="./js/vendors/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="./css/tailwind.css?v=1656463212739">
+    <link rel="stylesheet" href="https://unpkg.com/@vuepic/vue-datepicker@latest/dist/main.css">
+    <!-- js-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.4/vue.global.min.js"></script>
+    <script src="https://unpkg.com/@vuepic/vue-datepicker@latest"></script>
+    <link rel="stylesheet" href="./css/index.css?v=1656463212739">
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="loading z-999">
+        <div class="box flex">Loading<span></span></div>
+      </div>
+      <div class="waiting">
+        <div class="box w-full h-full flex justify-center items-center"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <header class="fixed inset-x-0 top-0 z-50 bg-gray-100">
+        <div class="container flex items-center justify-between px-3 py-2 relative lg:px-6 md:py-3">
+          <!-- logo-->
+          <h1 class="text-0 flex-shrink-0 w-30 z-50 mx-auto md:mx-0"><a href="./index.html">PICCHU<img src="./images/logo2.svg" alt="PICCHU"></a></h1>
+          <!-- toolbar-->
+          <nav class="items-center justify-end flex-row-reverse hidden md:flex">
+            <!-- login--><a class="text-white text-center text-14 bg-blue-100 px-3 rounded-full ml-2 my-1 leading-2.3 hover:opacity-80 md:ml-5" href="javascript:;" @click="fbLogShow=true" v-if="!is_login">註冊 / 登入</a>
+            <div class="ml-2 w-6 h-6 relative md:ml-5" v-if="is_login"><a class="rounded-full h-full overflow-hidden hover:opacity-80 cursor-pointer" href="javascript:;" @click="headListShow = !headListShow" @blur="headListShow = false"><img class="object-cover h-full" src="./images/cats.jpg" alt=""></a>
+              <!-- ...選單-->
+              <div class="ctrlList userC absolute text-center text-16 w-60 top-7 right-0 bg-white rounded-lg overflow-hidden hidden shadow-lg leading-3.5"><a class="border-b border-gray-200" href="profile.html">個人資料</a><a class="border-b border-gray-200" href="setting.html">設定</a><a class="text-red-100" href="javascript:;" @click="logOut();">登出</a></div>
+            </div>
+            <!-- tool btns-->
+            <div v-if="is_login"><a class="tool w-6 ml-2 showNotice md:ml-5 hasNotice" href="javascript:;" @click="noticeListShow = !noticeListShow" @blur="noticeListShow = false"> <img src="./images/icons/collect.svg" alt="">
+                <div class="redNotice pointer-events-none text-12 text-white"></div></a></div><a class="tool w-6 ml-2 md:ml-5" href="start_group.html"> <img src="./images/icons/creat.svg" alt=""></a><a class="tool w-6 ml-2 md:ml-5" href="picchu.html"> <img src="./images/icons/wave.svg" alt=""></a><a class="tool w-6 ml-2 md:ml-5 active" href="index.html"> <img src="./images/icons/gallery.svg" alt=""></a>
+            <!-- searchbar-->
+          </nav>
+        </div>
+      </header>
+      <!-- notice 選單-->
+      <div v-if="is_login">
+        <!-- notice 選單-->
+        <div class="ctrlList noticeC fixed top-10 right-0 w-full hidden">
+          <div class="container relative">
+            <div class="absolute right-2 ctGrid text-center text-16 w-100 bg-white rounded-lg overflow-hidden shadow-lg leading-3.5">
+              <div class="ctlTab flex border-b border-gray-200"><a class="active" href="javascript:;" @click="noticeTabChange($event, '.ctStory');">動態</a><a href="javascript:;" @click="noticeTabChange($event, '.ctAlert');">通知</a></div>
+              <div class="ctlTabTent">
+                <div class="ctTB ctStory scrolls flex-shrink-0">
+                  <!-- 1--><a class="flex justify-between" href="#" :class="['whoLike']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">kevin8869</div>
+                        <div class="inline-block">喜歡你的作品</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 2--><a class="flex justify-between" href="#" :class="['whoTag']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">santana_219santana_219santana_219santana_219santana_219santana_2</div>
+                        <div class="inline-block">在貼文中標記了你:</div><br>
+                        <div class="inline-block"><span class="text-blue-100 mr-1">@nanami_misoto </span>攝影師</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 3--><a class="flex justify-between" href="#" :class="['whoTrace']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate mr-1">kevin8869kevin8869kevin8869kevin8869kevin8869kevin8869</div>
+                        <div class="inline-block">開始追蹤你</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div></a>
+                  <!-- 4--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                </div>
+                <div class="ctTB ctAlert scrolls flex-shrink-0 hidden">
+                  <!-- 1--><a class="flex justify-between" href="#" :class="['whoInvite']" @click="groupInviteAlert();">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">kevin8869</div>
+                        <div class="inline-block">邀請你加入 <span>炎夏午後臺鹹女子宿舍</span></div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 2--><a class="flex justify-between" href="#" :class="['whoMessage']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">chien_mi</div>
+                        <div class="inline-block">在活動留言板留言</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 3--><a class="flex justify-between" href="#" :class="['whoMessage']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">chien_michien_michien_michien_michien_michien_mi</div>
+                        <div class="inline-block">在活動留言板留言</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 4--><a class="flex justify-between" href="#" :class="['whoSuccess']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/icons/finish.svg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="inline-block max-w-full truncate text-ellipsis mr-1">開團成功!</div>
+                        <div class="inline-block max-w-full truncate text-ellipsis">炎夏午後臺鹹女子宿舍</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="javascript:;" :class="['whoCancel']" @click="groupCancelAlert();">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/icons/warning.svg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="inline-block commentTxt">取消開團! 「炎夏午後台鹹女子宿舍」各位揪友們~很抱歉通知你們，因為參加的模特兒不足，所以取消此次的外拍活動</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 取消開團 通知-->
+        <div class="cancelAlertEvent eventPup popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999 hidden">
+          <div class="closeCover absolute w-full h-full" @click="close_eventPopUp($event);"></div>
+          <div class="eventPupTent mt-12 bg-white relative mx-auto h-4/5">
+            <div class="w-full h-full scrolls">
+              <div class="p-6 max-w-lg w-full min-h-full relative mx-auto pb-20 md:p-12 md:pb-24">
+                <h3 class="text-18 font-bold text-center">取消開團</h3>
+                <div class="tentB mt-4 md:mt-8">
+                  <!-- 時間-->
+                  <div class="date mb-4">
+                    <div class="inline-block mr-4 text-gray-400">時間：</div>
+                    <div class="inline-block mr-4">8月10日</div>
+                    <div class="inline-block mr-4">星期三</div>
+                    <div class="inline-block mr-4">8:00P.M.</div>
+                  </div>
+                  <!-- 團名-->
+                  <div class="eventName mb-4">
+                    <div class="inline-block mr-4 text-gray-400">團名：</div>
+                    <div class="inline-block mr-4 font-bold">都市霓虹*越夜越美麗*</div>
+                  </div>
+                  <!-- 人數-->
+                  <div class="flex items-center mb-4 flex-wrap">
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">已參加：</div>
+                      <div class="inline-block">7</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">人數上限：</div>
+                      <div class="inline-block">15</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">審核中：</div>
+                      <div class="inline-block text-red-100">22</div>
+                    </div>
+                  </div>
+                  <!-- 輸入框-->
+                  <div class="eventTxtArea mt-6">
+                    <div class="text-16">
+                       各位揪友們~很抱歉通知你們，因為參加的模特兒不足，所以取消此次的外拍活動。<br>之後有機會的話希望大家能再來參加!!! <br>感謝你們這次的參加 ~</div>
+                  </div>
+                </div>
+                <div class="flex justify-center items-center absolute left-0 bottom-0 w-full pb-4 md:pb-6"><a class="btns text-white bg-blue-100 border-0 text-16 w-30 mt-4 mx-auto mb-3 leading-2.75" href="javascript:;" @click="close_eventPopUp($event);">確定</a></div>
+              </div>
+            </div><a class="eventPupCloseBtn absolute top-0 w-7" href="javascript:;" @click="close_eventPopUp($event);"><img src="./images/icons/close_w.svg" alt=""></a>
+          </div>
+        </div>
+        <!-- 邀請入團 通知-->
+        <div class="inviteAlertEvent eventPup popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999 hidden">
+          <div class="closeCover absolute w-full h-full" @click="close_eventPopUp($event);"></div>
+          <div class="eventPupTent mt-12 bg-white relative mx-auto h-4/5">
+            <div class="w-full h-full scrolls">
+              <div class="p-6 max-w-lg w-full min-h-full relative mx-auto pb-20 md:p-12 md:pb-24">
+                <h3 class="text-18 font-bold text-center">邀請入團</h3>
+                <div class="tentB mt-4 relative md:mt-8">
+                  <!-- 時間-->
+                  <div class="date mb-4">
+                    <div class="inline-block mr-4 text-gray-400">時間：</div>
+                    <div class="inline-block mr-4">8月10日</div>
+                    <div class="inline-block mr-4">星期三</div>
+                    <div class="inline-block mr-4">8:00P.M.</div>
+                  </div>
+                  <!-- 團名-->
+                  <div class="eventName mb-4">
+                    <div class="inline-block mr-4 text-gray-400">團名：</div>
+                    <div class="inline-block mr-4 font-bold">都市霓虹*越夜越美麗*</div>
+                  </div>
+                  <!-- 人數-->
+                  <div class="flex items-center mb-4 flex-wrap">
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">已參加：</div>
+                      <div class="inline-block">7</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">人數上限：</div>
+                      <div class="inline-block">15</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">審核中：</div>
+                      <div class="inline-block text-red-100">22</div>
+                    </div>
+                  </div>
+                  <!-- 輸入框-->
+                  <div class="eventTxtArea mt-6">
+                    <div class="text-16">
+                       你好，我開了一個外拍團，想邀請你來加入~</div>
+                  </div>
+                </div>
+                <div class="flex justify-center items-center absolute left-0 bottom-0 w-full pb-4 md:pb-6"><a class="btns text-white bg-blue-100 border-0 text-16 w-30 mt-4 mx-auto mb-3 leading-2.75" href="javascript:;" @click="close_eventPopUp($event);">確定</a></div>
+              </div>
+            </div><a class="eventPupCloseBtn absolute top-0 w-7" href="javascript:;" @click="close_eventPopUp($event);"><img src="./images/icons/close_w.svg" alt=""></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-16 relative" id="main" :class="{'pt-6': !is_login}">
+        <main_content :is_login="is_login" :user="user" @ajax_fn="fn_ajax" @ajax_error="error_ajax"></main_content>
+      </div>
+      <!-- footer-->
+      <footer class="bg-gray-100 hidden md:block">
+        <div class="container flex justify-end items-center text-14 text-gray-400 relative px-6 py-4"><a class="ml-5 hover:opacity-80" href="pravicy.html" target="_blank">隱私權政策</a><a class="ml-5 hover:opacity-80" href="rules.html" target="_blank">使用者條款</a>
+          <p class="absolute left-6 lg:left-1/2 lg:transform lg:-translate-x-1/2">© 2022 拍揪 Picchu</p>
+        </div>
+      </footer>
+      <div class="toolBar fixed bg-gray-100 z-999 left-0 bottom-0 w-full md:hidden">
+        <div class="flex justify-around items-center py-3"><a class="tool w-6 active" href="javascript:;" @click="noticeListShow = false"> <img src="./images/icons/gallery.svg" alt=""></a><a class="tool w-6" href="./picchu.html"> <img src="./images/icons/wave.svg" alt=""></a><a class="tool w-6" href="start_group.html"> <img src="./images/icons/creat.svg" alt=""></a>
+          <div v-if="is_login"><a class="tool w-6 showNotice hasNotice" href="javascript:;" @click="noticeListShow = true" @blur="noticeListShow = false"> <img src="./images/icons/collect.svg" alt="">
+              <div class="redNotice pointer-events-none text-12 text-white"></div></a></div>
+          <div class="relative" v-if="is_login"><a class="tool w-6" href="javascript:;" @click="headListShow = !headListShow" @blur="headListShow = false"> <img src="./images/icons/personal.svg" alt=""></a>
+            <!-- ...選單-->
+            <div class="ctrlList userC absolute text-center text-16 w-60 bottom-full right-0 bg-white rounded-lg overflow-hidden hidden shadow-lg leading-3.5"><a class="border-b border-gray-200" href="profile.html">個人資料</a><a class="border-b border-gray-200" href="setting.html">設定</a><a class="text-red-100" href="javascript:;" @click="logOut();">登出</a></div>
+          </div><a class="text-white text-center text-14 bg-blue-100 px-3 rounded-full leading-2.3 hover:opacity-80" href="javascript:;" @click="fbLogShow=true" v-if="!is_login">註冊 / 登入</a>
+        </div>
+      </div>
+      <!-- FB login-->
+      <div class="fbLog popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999" v-if="fbLogShow" :class="[{'fbShow': fbLogShow}]">
+        <div class="closeCover absolute w-full h-full"></div>
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="popTent bg-white relative mx-auto mb-4">
+            <div class="w-full h-full flex flex-col items-center justify-center">
+              <div class="pic_PICCHU w-20 mx-auto mb-8 md:w-40 md:mb-16"><img src="./images/logo.svg" alt=""></div><a class="fbBtn mx-auto" href="javascript:;" @click="fbLogIn();"> <img src="./images/btn_fb.svg" alt=""></a>
+              <!-- 條款-->
+              <div class="text-14 text-center text-black mt-4 md:mt-8">點擊註冊，<span class="inline-block">即表示你同意 <a class="inline text-blue-100 hover:text-blue-200" href="rules.html" target="_blank">服務條款 </a>及 <a class="inline text-blue-100 hover:text-blue-200" href="pravicy.html" target="_blank">隱私權條款</a></span></div>
+              <!-- closeBtn--><a class="closeFBpop" href="javascript:;" @click="fbLogShow=false"> 
+                <div class="bg-black"></div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/x-template" id="index-content">
+      <!-- 頁籤-->
+      <div class="profile_tabBox mb-2 mt-2 sticky w-full z-10 bg-white md:top-16 md:pb-1 md:mb-3" v-if="is_login">
+        <div class="container md:px-3">
+          <div class="flex text-14 text-black text-center w-full"><a class="profile_tab active w-1/2" href="javascript:;" @click="tabChange($event, 'photoWalls')">熱門</a><a class="profile_tab w-1/2" href="javascript:;" @click="tabChange($event,'followWalls')">追蹤</a></div>
+        </div>
+      </div>
+      <!-- photos-->
+      <div class="photoWalls tabTA pb-14 md:pb-10">
+        <div class="container md:px-3">
+          <div class="grid grid-cols-3 gap-1 lg:grid-cols-4 lg:gap-6 md:gap-4"><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a>
+          </div>
+        </div>
+      </div>
+      <!-- 追蹤-->
+      <div class="followWalls tabTA pb-14 hidden md:pb-10">
+        <div class="container md:px-3">
+          <div class="grid grid-cols-3 gap-1 lg:grid-cols-4 lg:gap-6 md:gap-4"><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a><a class="photo relative lg:h-54" href="javascript:;" @click="photoPopUpShow()"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt="">
+              <div class="photoInfoCover absolute w-full h-full flex items-center justify-center top-0">
+                <div> 
+                  <div class="flex items-center mb-4"><img class="w-6" src="./images/icons/heart_fill_w.svg" alt="">
+                    <div class="text-white ml-3">250</div>
+                  </div>
+                  <div class="flex items-center"><img class="w-6" src="./images/icons/comment_fill_w.svg" alt="">
+                    <div class="text-white ml-3">15</div>
+                  </div>
+                </div>
+              </div></a>
+          </div>
+        </div>
+      </div>
+      <div class="photoPup popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999 hidden" ref="photoPup">
+        <div class="closeCover absolute w-full h-full" @click="close_photoPopUp($event)"></div>
+        <div class="photoPupTent mt-8 bg-white relative mx-auto h-4/5">
+          <div class="phBx w-full h-full flex">
+            <div class="picWall bg-gray-200 w-full relative">
+              <div class="swiper photoSlider absolute top-0 left-0 w-full h-full overflow-hidden">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide"><img class="w-full h-full object-contain lg:object-cover" src="./images/cats.jpg" alt=""></div>
+                  <div class="swiper-slide"><img class="w-full h-full object-contain lg:object-cover" src="./images/cats.jpg" alt=""></div>
+                  <div class="swiper-slide overflow-hidden"><img class="w-full h-full object-contain lg:object-cover" src="./images/cats.jpg" alt=""></div>
+                  <div class="swiper-slide overflow-hidden"><img class="w-full h-full object-contain lg:object-cover" src="./images/cats.jpg" alt=""></div>
+                  <div class="swiper-slide overflow-hidden"><img class="w-full h-full object-contain lg:object-cover" src="./images/cats.jpg" alt=""></div>
+                </div>
+                <div class="swiperPhotoNav absolute w-full"><a class="swP swp_L w-8" href="javascript:;"><img src="./images/icons/left.svg" alt=""></a><a class="swP swp_R w-8" href="javascript:;"><img src="./images/icons/right.svg" alt=""></a></div>
+              </div>
+            </div>
+            <div class="photoInfo w-80 flex-shrink-0 relative overflow-hidden lg:w-128" ref="photoPup222">
+              <div class="hoster border-b border-gray-200">
+                <div class="flex items-center relative pr-6"><a class="info_userHead mr-2" href="profile.html"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                  <div class="infos"> 
+                    <div class="name text-14 font-bold">nanami_misoto</div>
+                    <div class="flex items-center text-12 text-gray-300">
+                      <div class="city mr-1">臺北市</div>
+                      <div class="work mr-3">模特兒</div>
+                      <div class="stars flex items-center">
+                        <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                      </div>
+                    </div>
+                  </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 self-start" href="javascript:;" v-if="is_login">追蹤</a>
+                  <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                    <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200" href="javascript:;">複製連結</a><a class="border-b border-gray-200" href="javascript:;">分享</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                </div>
+              </div>
+              <div class="users">
+                <div class="user_host pb-6">
+                  <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="commentTxt py-2">
+                     慵懶舒服的拍攝日<br><a class="hashtag" href="#">#夏</a><a class="hashtag" href="#">#summer</a></div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+                <div class="user_single pb-6">
+                  <div class="flex items-center relative"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                    <div class="infos"> 
+                      <div class="name text-14 font-bold">nanami_misoto</div>
+                      <div class="flex items-center text-12 text-gray-300">
+                        <div class="city mr-1">臺北市</div>
+                        <div class="work mr-3">模特兒</div>
+                        <div class="stars flex items-center">
+                          <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ...選單--><a class="absolute text-30 -top-4 -right-2 lg:right-1" href="javascript:;" v-if="is_login"> <span @click="ctrlShow($event, true);">...</span>
+                      <div class="ctrlList absolute text-center text-16 w-60 top-6 right-2 bg-white rounded-lg overflow-hidden hidden leading-3.5"><a class="border-b border-gray-200 text-red-100" href="javascript:;">刪除</a><a class="text-blue-100" href="javascript:;" @click="ctrlShow($event, false);">取消</a></div></a>
+                  </div>
+                  <div class="commentTxt py-2">
+                     好喜歡這次的作品!!<br><a class="atTag" href="#">@hihi_man @chien_mi</a><a class="atTag" href="#">@twinkletwinkle</a>Than you ~~<br><a class="atTag" href="#">@siz_xx</a>這個地方在溫哥華市中心的巷子喔</div>
+                  <div class="dateTxt text-gray-300 text-12">3天前</div>
+                </div>
+              </div>
+              <div class="comment border-t border-gray-200">
+                <div class="flex justify-between items-center text-14">
+                  <div class="comment_L flex items-center"><a class="fullheart icon w-8 mr-4" href="javascript:;" :class="{active: true}" v-if="is_login"> <img src="./images/icons/heart_fill.svg" alt=""></a>
+                    <div class="flex items-center">
+                      <div class="icon w-8 mr-1"><img src="./images/icons/comment.svg" alt=""></div>
+                      <div class="text-black">15</div>
+                    </div>
+                  </div><a class="comment_R text-blue-100 hover:opacity-80" href="javascript:;" @click="likeListShow(true);">
+                     250個喜歡</a>
+                </div>
+                <div class="commentInput bg-gray-100 relative" v-if="is_login">
+                  <textarea class="border-0 bg-transparent max-w-full w-full h-14 max-h-14 pr-36 pt-4" name="" rows="1" placeholder="留下你的想法......"></textarea><a class="text-white text-center bg-blue-100 px-3 rounded-full absolute top-3 right-4 leading-2.3 hover:opacity-80 md:ml-5" href="javascript:;" @click=""><img class="inline w-6 mr-2" src="./images/icons/enter.svg" alt="">傳送</a>
+                </div>
+              </div>
+              <div class="likeBox absolute w-full h-full bg-white top-0 left-full" v-if="is_login"><a class="return text-gray-400 w-20 pb-2" href="javascript:;" @click="likeListShow(false);"><img class="inline-block w-6 mb-1" src="./images/icons/back_gray.svg" alt="">返回</a>
+                <div class="scrolls pt-2">
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-black border-0 w-16 absolute right-1" href="javascript:;" v-if="true">已追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                  <div class="user_single pb-6 relative">
+                    <div class="flex items-center"><a class="info_userHead mr-2" href="#"> <img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></a>
+                      <div class="infos"> 
+                        <div class="name text-14 font-bold">nanami_misoto</div>
+                        <div class="flex items-center text-12 text-gray-300">
+                          <div class="city mr-1">臺北市</div>
+                          <div class="work mr-3">模特兒</div>
+                          <div class="stars flex items-center">
+                            <div class="starPic w-4"><img src="./images/icons/star_fill.svg" alt=""></div><span class="text-black font-bold">4.8</span>
+                          </div>
+                        </div>
+                      </div><a class="btns text-white text-12 bg-primaryDefault border-0 w-16 absolute right-1" href="javascript:;" v-if="true">追蹤</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><a class="photoPupCloseBtn absolute top-0 w-7" href="javascript:;" @click="close_photoPopUp($event)"><img src="./images/icons/close_w.svg" alt=""></a>
+        </div>
+      </div>
+    </script>
+    <script src="./js/layout.js?v=1656463212739"></script>
+    <script src="./js/index.js?v=1656463212739"></script>
+    <script>var app = Vm.mount('#wrapper')</script>
+  </body>
+</html>

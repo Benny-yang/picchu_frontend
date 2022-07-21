@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>PICCHU</title>
+    <!-- SEO-->
+    <meta name="title" content="PICCHU">
+    <meta name="description" content="PICCHU">
+    <!-- facebook-->
+    <meta property="og:title" content="PICCHU">
+    <meta property="og:description" content="PICCHU">
+    <meta property="og:image" content="./images/fb.jpg">
+    <meta property="og:url" content="./">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PICCHU">
+    <!-- favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <!-- css-->
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <script src="./js/vendors/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="./css/tailwind.css?v=1656463211931">
+    <link rel="stylesheet" href="https://unpkg.com/@vuepic/vue-datepicker@latest/dist/main.css">
+    <!-- js-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.4/vue.global.min.js"></script>
+    <script src="https://unpkg.com/@vuepic/vue-datepicker@latest"></script>
+    <link rel="stylesheet" href="./css/profile.css?v=1656463211931">
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="loading z-999">
+        <div class="box flex">Loading<span></span></div>
+      </div>
+      <div class="waiting">
+        <div class="box w-full h-full flex justify-center items-center"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <header class="fixed inset-x-0 top-0 z-50 bg-gray-100">
+        <div class="container flex items-center justify-between px-3 py-2 relative lg:px-6 md:py-3">
+          <!-- logo-->
+          <h1 class="text-0 flex-shrink-0 w-30 z-50 mx-auto md:mx-0"><a href="./index.html">PICCHU<img src="./images/logo2.svg" alt="PICCHU"></a></h1>
+          <!-- toolbar-->
+          <nav class="items-center justify-end flex-row-reverse hidden md:flex">
+            <!-- login--><a class="text-white text-center text-14 bg-blue-100 px-3 rounded-full ml-2 my-1 leading-2.3 hover:opacity-80 md:ml-5" href="javascript:;" @click="fbLogShow=true" v-if="!is_login">註冊 / 登入</a>
+            <div class="ml-2 w-6 h-6 relative md:ml-5" v-if="is_login"><a class="rounded-full h-full overflow-hidden hover:opacity-80 cursor-pointer" href="javascript:;" @click="headListShow = !headListShow" @blur="headListShow = false"><img class="object-cover h-full" src="./images/cats.jpg" alt=""></a>
+              <!-- ...選單-->
+              <div class="ctrlList userC absolute text-center text-16 w-60 top-7 right-0 bg-white rounded-lg overflow-hidden hidden shadow-lg leading-3.5"><a class="border-b border-gray-200" href="profile.html">個人資料</a><a class="border-b border-gray-200" href="setting.html">設定</a><a class="text-red-100" href="javascript:;" @click="logOut();">登出</a></div>
+            </div>
+            <!-- tool btns-->
+            <div v-if="is_login"><a class="tool w-6 ml-2 showNotice md:ml-5 hasNotice" href="javascript:;" @click="noticeListShow = !noticeListShow" @blur="noticeListShow = false"> <img src="./images/icons/collect.svg" alt="">
+                <div class="redNotice pointer-events-none text-12 text-white"></div></a></div><a class="tool w-6 ml-2 md:ml-5" href="start_group.html"> <img src="./images/icons/creat.svg" alt=""></a><a class="tool w-6 ml-2 md:ml-5" href="picchu.html"> <img src="./images/icons/wave.svg" alt=""></a><a class="tool w-6 ml-2 md:ml-5" href="index.html"> <img src="./images/icons/gallery.svg" alt=""></a>
+            <!-- searchbar-->
+          </nav>
+        </div>
+      </header>
+      <!-- notice 選單-->
+      <div v-if="is_login">
+        <!-- notice 選單-->
+        <div class="ctrlList noticeC fixed top-10 right-0 w-full hidden">
+          <div class="container relative">
+            <div class="absolute right-2 ctGrid text-center text-16 w-100 bg-white rounded-lg overflow-hidden shadow-lg leading-3.5">
+              <div class="ctlTab flex border-b border-gray-200"><a class="active" href="javascript:;" @click="noticeTabChange($event, '.ctStory');">動態</a><a href="javascript:;" @click="noticeTabChange($event, '.ctAlert');">通知</a></div>
+              <div class="ctlTabTent">
+                <div class="ctTB ctStory scrolls flex-shrink-0">
+                  <!-- 1--><a class="flex justify-between" href="#" :class="['whoLike']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">kevin8869</div>
+                        <div class="inline-block">喜歡你的作品</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 2--><a class="flex justify-between" href="#" :class="['whoTag']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">santana_219santana_219santana_219santana_219santana_219santana_2</div>
+                        <div class="inline-block">在貼文中標記了你:</div><br>
+                        <div class="inline-block"><span class="text-blue-100 mr-1">@nanami_misoto </span>攝影師</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 3--><a class="flex justify-between" href="#" :class="['whoTrace']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate mr-1">kevin8869kevin8869kevin8869kevin8869kevin8869kevin8869</div>
+                        <div class="inline-block">開始追蹤你</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div></a>
+                  <!-- 4--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="#" :class="['whoComment']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">miracled223miracled223miracled223miracled223miracled223miracled22</div>
+                        <div class="inline-block">留言: </div><br>
+                        <div class="inline-block commentTxt">拍得真好，拍出了他的帥氣、與英挺，身上的衣服也襯托出她的黑顯得更加的耀眼。背景的黃襯托他烏金的大餅臉</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                </div>
+                <div class="ctTB ctAlert scrolls flex-shrink-0 hidden">
+                  <!-- 1--><a class="flex justify-between" href="#" :class="['whoInvite']" @click="groupInviteAlert();">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">kevin8869</div>
+                        <div class="inline-block">邀請你加入 <span>炎夏午後臺鹹女子宿舍</span></div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 2--><a class="flex justify-between" href="#" :class="['whoMessage']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">chien_mi</div>
+                        <div class="inline-block">在活動留言板留言</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 3--><a class="flex justify-between" href="#" :class="['whoMessage']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="font-bold inline-block max-w-full truncate text-ellipsis mr-1">chien_michien_michien_michien_michien_michien_mi</div>
+                        <div class="inline-block">在活動留言板留言</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 4--><a class="flex justify-between" href="#" :class="['whoSuccess']">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/icons/finish.svg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="inline-block max-w-full truncate text-ellipsis mr-1">開團成功!</div>
+                        <div class="inline-block max-w-full truncate text-ellipsis">炎夏午後臺鹹女子宿舍</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                  <!-- 5--><a class="flex justify-between" href="javascript:;" :class="['whoCancel']" @click="groupCancelAlert();">
+                    <div class="aL flex w-full">
+                      <div class="headImg flex-shrink-0 w-10 h-10 rounded-full overflow-hidden mr-2"><img class="h-full object-cover" src="./images/icons/warning.svg" alt=""></div>
+                      <div class="noticTxt text-14 text-left">
+                        <div class="inline-block commentTxt">取消開團! 「炎夏午後台鹹女子宿舍」各位揪友們~很抱歉通知你們，因為參加的模特兒不足，所以取消此次的外拍活動</div>
+                        <div class="noticeTime text-12 text-gray-300">30秒前</div>
+                      </div>
+                    </div>
+                    <div class="aR w-10 h-10 flex-shrink-0"><img class="h-full object-cover" src="./images/cats.jpg" alt=""></div></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 取消開團 通知-->
+        <div class="cancelAlertEvent eventPup popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999 hidden">
+          <div class="closeCover absolute w-full h-full" @click="close_eventPopUp($event);"></div>
+          <div class="eventPupTent mt-12 bg-white relative mx-auto h-4/5">
+            <div class="w-full h-full scrolls">
+              <div class="p-6 max-w-lg w-full min-h-full relative mx-auto pb-20 md:p-12 md:pb-24">
+                <h3 class="text-18 font-bold text-center">取消開團</h3>
+                <div class="tentB mt-4 md:mt-8">
+                  <!-- 時間-->
+                  <div class="date mb-4">
+                    <div class="inline-block mr-4 text-gray-400">時間：</div>
+                    <div class="inline-block mr-4">8月10日</div>
+                    <div class="inline-block mr-4">星期三</div>
+                    <div class="inline-block mr-4">8:00P.M.</div>
+                  </div>
+                  <!-- 團名-->
+                  <div class="eventName mb-4">
+                    <div class="inline-block mr-4 text-gray-400">團名：</div>
+                    <div class="inline-block mr-4 font-bold">都市霓虹*越夜越美麗*</div>
+                  </div>
+                  <!-- 人數-->
+                  <div class="flex items-center mb-4 flex-wrap">
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">已參加：</div>
+                      <div class="inline-block">7</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">人數上限：</div>
+                      <div class="inline-block">15</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">審核中：</div>
+                      <div class="inline-block text-red-100">22</div>
+                    </div>
+                  </div>
+                  <!-- 輸入框-->
+                  <div class="eventTxtArea mt-6">
+                    <div class="text-16">
+                       各位揪友們~很抱歉通知你們，因為參加的模特兒不足，所以取消此次的外拍活動。<br>之後有機會的話希望大家能再來參加!!! <br>感謝你們這次的參加 ~</div>
+                  </div>
+                </div>
+                <div class="flex justify-center items-center absolute left-0 bottom-0 w-full pb-4 md:pb-6"><a class="btns text-white bg-blue-100 border-0 text-16 w-30 mt-4 mx-auto mb-3 leading-2.75" href="javascript:;" @click="close_eventPopUp($event);">確定</a></div>
+              </div>
+            </div><a class="eventPupCloseBtn absolute top-0 w-7" href="javascript:;" @click="close_eventPopUp($event);"><img src="./images/icons/close_w.svg" alt=""></a>
+          </div>
+        </div>
+        <!-- 邀請入團 通知-->
+        <div class="inviteAlertEvent eventPup popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999 hidden">
+          <div class="closeCover absolute w-full h-full" @click="close_eventPopUp($event);"></div>
+          <div class="eventPupTent mt-12 bg-white relative mx-auto h-4/5">
+            <div class="w-full h-full scrolls">
+              <div class="p-6 max-w-lg w-full min-h-full relative mx-auto pb-20 md:p-12 md:pb-24">
+                <h3 class="text-18 font-bold text-center">邀請入團</h3>
+                <div class="tentB mt-4 relative md:mt-8">
+                  <!-- 時間-->
+                  <div class="date mb-4">
+                    <div class="inline-block mr-4 text-gray-400">時間：</div>
+                    <div class="inline-block mr-4">8月10日</div>
+                    <div class="inline-block mr-4">星期三</div>
+                    <div class="inline-block mr-4">8:00P.M.</div>
+                  </div>
+                  <!-- 團名-->
+                  <div class="eventName mb-4">
+                    <div class="inline-block mr-4 text-gray-400">團名：</div>
+                    <div class="inline-block mr-4 font-bold">都市霓虹*越夜越美麗*</div>
+                  </div>
+                  <!-- 人數-->
+                  <div class="flex items-center mb-4 flex-wrap">
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">已參加：</div>
+                      <div class="inline-block">7</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">人數上限：</div>
+                      <div class="inline-block">15</div>
+                    </div>
+                    <div class="mr-8">
+                      <div class="inline-block mr-4 text-gray-400">審核中：</div>
+                      <div class="inline-block text-red-100">22</div>
+                    </div>
+                  </div>
+                  <!-- 輸入框-->
+                  <div class="eventTxtArea mt-6">
+                    <div class="text-16">
+                       你好，我開了一個外拍團，想邀請你來加入~</div>
+                  </div>
+                </div>
+                <div class="flex justify-center items-center absolute left-0 bottom-0 w-full pb-4 md:pb-6"><a class="btns text-white bg-blue-100 border-0 text-16 w-30 mt-4 mx-auto mb-3 leading-2.75" href="javascript:;" @click="close_eventPopUp($event);">確定</a></div>
+              </div>
+            </div><a class="eventPupCloseBtn absolute top-0 w-7" href="javascript:;" @click="close_eventPopUp($event);"><img src="./images/icons/close_w.svg" alt=""></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-16 pt-6" id="main">
+        <main_content :is_login="is_login"></main_content>
+      </div>
+      <!-- footer-->
+      <footer class="bg-gray-100 hidden md:block">
+        <div class="container flex justify-end items-center text-14 text-gray-400 relative px-6 py-4"><a class="ml-5 hover:opacity-80" href="pravicy.html" target="_blank">隱私權政策</a><a class="ml-5 hover:opacity-80" href="rules.html" target="_blank">使用者條款</a>
+          <p class="absolute left-6 lg:left-1/2 lg:transform lg:-translate-x-1/2">© 2022 拍揪 Picchu</p>
+        </div>
+      </footer>
+      <div class="toolBar fixed bg-gray-100 z-999 left-0 bottom-0 w-full md:hidden">
+        <div class="flex justify-around items-center py-3"><a class="tool w-6" href="./"> <img src="./images/icons/gallery.svg" alt=""></a><a class="tool w-6" href="./picchu.html"> <img src="./images/icons/wave.svg" alt=""></a><a class="tool w-6" href="start_group.html"> <img src="./images/icons/creat.svg" alt=""></a>
+          <div v-if="is_login"><a class="tool w-6 showNotice hasNotice" href="javascript:;" @click="noticeListShow = true" @blur="noticeListShow = false"> <img src="./images/icons/collect.svg" alt="">
+              <div class="redNotice pointer-events-none text-12 text-white"></div></a></div>
+          <div class="relative" v-if="is_login"><a class="tool w-6" href="javascript:;" @click="headListShow = !headListShow" @blur="headListShow = false"> <img src="./images/icons/personal.svg" alt=""></a>
+            <!-- ...選單-->
+            <div class="ctrlList userC absolute text-center text-16 w-60 bottom-full right-0 bg-white rounded-lg overflow-hidden hidden shadow-lg leading-3.5"><a class="border-b border-gray-200" href="profile.html">個人資料</a><a class="border-b border-gray-200" href="setting.html">設定</a><a class="text-red-100" href="javascript:;" @click="logOut();">登出</a></div>
+          </div><a class="text-white text-center text-14 bg-blue-100 px-3 rounded-full leading-2.3 hover:opacity-80" href="javascript:;" @click="fbLogShow=true" v-if="!is_login">註冊 / 登入</a>
+        </div>
+      </div>
+      <!-- FB login-->
+      <div class="fbLog popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999" v-if="fbLogShow" :class="[{'fbShow': fbLogShow}]">
+        <div class="closeCover absolute w-full h-full"></div>
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="popTent bg-white relative mx-auto mb-4">
+            <div class="w-full h-full flex flex-col items-center justify-center">
+              <div class="pic_PICCHU w-20 mx-auto mb-8 md:w-40 md:mb-16"><img src="./images/logo.svg" alt=""></div><a class="fbBtn mx-auto" href="javascript:;" @click="fbLogIn();"> <img src="./images/btn_fb.svg" alt=""></a>
+              <!-- 條款-->
+              <div class="text-14 text-center text-black mt-4 md:mt-8">點擊註冊，<span class="inline-block">即表示你同意 <a class="inline text-blue-100 hover:text-blue-200" href="rules.html" target="_blank">服務條款 </a>及 <a class="inline text-blue-100 hover:text-blue-200" href="pravicy.html" target="_blank">隱私權條款</a></span></div>
+              <!-- closeBtn--><a class="closeFBpop" href="javascript:;" @click="fbLogShow=false"> 
+                <div class="bg-black"></div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/x-template" id="index-content">
+      <!-- photos-->
+      <div class="recordWalls pb-14 md:pb-10">
+        <div class="container px-3">
+          <div class="lg:grid-cols-3 lg:gap-6 md:gap-4 md:grid-cols-2 md:grid"><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a><a class="record relative mb-4 md:mb-0" href="event.html">
+              <div class="flex border-b border-gray-200 pb-2 lg:block">
+                <div class="recordPic w-30 flex-shrink-0 lg:w-full lg:h-auto"><img class="w-full h-full object-cover" src="./images/cats.jpg" alt=""></div>
+                <div class="md">
+                  <div class="recordTlt font-bold text-black text-20 mb-2">陽光女孩、健康風比基尼外拍</div>
+                  <div class="flex justify-between mt-2 lg:block lg:mt-0">
+                    <div class="loca text-gray-400 mb-2">高雄市</div>
+                    <div class="timeBox justify-between text-right lg:flex lg:text-left">
+                      <div class="text-gray-400"><span class="mr-2">11月6日</span><span>星期六</span></div>
+                      <div class="text-red-100">剩餘3天15時</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bd text-black">
+                <div class="flex justify-between items-center">
+                  <div class="tags flex"> 
+                    <div class="chrTag">模特兒</div>
+                    <div class="chrTag">攝影師</div>
+                  </div>
+                  <div class="status">拍揪中</div>
+                </div>
+              </div></a>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script src="./js/layout.js?v=1656463211931"></script>
+    <script src="./js/index.js?v=1656463211931"></script>
+    <script>var app = Vm.mount('#wrapper')</script>
+  </body>
+</html>

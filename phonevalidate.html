@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <!-- SEO-->
+    <meta name="title">
+    <meta name="description">
+    <!-- facebook-->
+    <meta property="og:title">
+    <meta property="og:description">
+    <meta property="og:image">
+    <meta property="og:url">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name">
+    <!-- favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <!-- css-->
+    <link rel="stylesheet" href="./css/tailwind.css?v=undefined">
+    <link rel="stylesheet" href="https://unpkg.com/@vuepic/vue-datepicker@latest/dist/main.css">
+    <!-- js-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.4/vue.global.min.js"></script>
+    <script src="https://unpkg.com/@vuepic/vue-datepicker@latest"></script>
+    <link rel="stylesheet" href="./css/index.css?v=undefined">
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="mt-16 relative" id="main" :class="{'pt-6': !is_login}">
+        <main_content :is_login="is_login"></main_content>
+      </div>
+      <!-- footer-->
+    </div>
+    <script type="text/x-template" id="phone-validate">
+      <div class="phoneValidate popUp fixed top-0 left-0 w-full h-full bg-gray-50 z-999">
+        <div class="closeCover absolute w-full h-full"></div>
+        <div class="flex items-center justify-center w-full h-full">
+          <div class="popTent bg-white relative mx-auto mb-4">
+            <div class="pvTent w-full flex flex-col items-center justify-between" v-if="!finishValidate">
+              <div class="ppTop">
+                <div class="pic_PICCHU w-20 mx-auto mb-6 md:w-24"><img src="./images/logo.svg" alt=""></div>
+                <div class="keyNumber kn01 text-center mb-6" :class="[{disabled:keyingValidateCode&amp;&amp;!countEnd}]">
+                  <div class="font-bold mt-8" v-if="!keyingValidateCode&amp;&amp;!countEnd">請輸入手機號碼</div>
+                  <!-- 手機號碼-->
+                  <div class="setting_item">
+                    <div class="settingInp relative" data-error="格式錯誤，請輸入手機後 9 碼">
+                      <input type="text" value="99999999" placeholder="輸入手機後 9 碼" maxlength="9" inputmode="numeric">
+                      <div class="absolute pointer-events-none text-gray-300 left-2 mt-1 top-1/2 transform -translate-y-1/2">+886 (0)</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="keyNumber kn02 text-center mb-4" v-if="keyingValidateCode">
+                  <div class="font-bold">請輸入驗證碼</div>
+                  <!-- 驗證碼-->
+                  <div class="setting_item error">
+                    <div class="settingInp relative" data-error="驗證碼錯誤">
+                      <input type="text" value="" placeholder="驗證碼" maxlength="9" inputmode="numeric">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ppBottm">
+                <div v-if="!keyingValidateCode"><a class="btns text-16 bg-primaryDefault text-white w-48 mx-auto leading-2.75" href="javascript:;" @click="ajax_getValidateCode();">
+                     傳送驗證碼</a>
+                  <!-- 提示文字-->
+                  <div class="text-14 text-gray-400 text-center mt-4">您將會收到 SMS 認證碼簡訊，請於五分鐘內輸入完畢。</div>
+                </div>
+                <div v-if="keyingValidateCode"><a class="btns text-16 bg-primaryDefault text-white w-48 mx-auto" :class="['leading-2.75', {disabled:countEnd}]" href="javascript:;" @click="finishValidate=true">
+                     確定</a><a class="btns text-16 text-blue-100 w-48 mx-auto border-transparent" :class="['leading-2.75', {disabled:!countEnd}]" href="javascript:;" @click="ajax_getValidateCode();">
+                     重新傳送</a>
+                  <!-- 提示文字-->
+                  <div class="text-14 text-gray-400 text-center">等待 <span class="text-red-100">{{countingNumber}}秒 </span>後，即可重新傳送驗證碼</div>
+                </div>
+              </div>
+              <!-- closeBtn--><a class="closeFBpop" href="javascript:;">
+                <div class="bg-black"></div></a>
+            </div>
+            <div class="w-full h-full flex flex-col items-center justify-center text-center" v-if="finishValidate">
+              <div class="text-32 font-bold text-green mb-8">認證成功</div>
+              <div class="w-20 mx-auto mb-6 md:w-24"><img src="./images/icons/finish.svg" alt=""></div>
+              <div class="text-18 text-gray-400 font-bold mb-6">下一步，設定基本資料</div><a class="btns text-16 w-48 mx-auto text-white bg-primaryDefault leading-2.75" href="signin.html" @click="">
+                 確定</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script src="./js/layout.js?v=undefined"></script>
+    <script src="./js/phone_validate.js?v=undefined"></script>
+    <script>var app = Vm.mount('#wrapper')</script>
+  </body>
+</html>
