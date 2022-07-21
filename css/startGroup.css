@@ -870,6 +870,9 @@ a.closeFBpop:hover div {
     background-position: top center;
     background-size: 100% 100%;
   }
+  .toApply.afterLogin {
+    bottom: 2.5rem;
+  }
 
   .m_eventInfo {
     width: 100%;
@@ -1077,4 +1080,3 @@ a.closeFBpop:hover div {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
 }
-/*# sourceMappingURL=startGroup.css.map */

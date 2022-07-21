@@ -870,6 +870,9 @@ a.closeFBpop:hover div {
     background-position: top center;
     background-size: 100% 100%;
   }
+  .toApply.afterLogin {
+    bottom: 2.5rem;
+  }
 
   .m_eventInfo {
     width: 100%;
@@ -1040,4 +1043,3 @@ ul.bar a:hover {
     width: 2.4rem;
   }
 }
-/*# sourceMappingURL=setting.css.map */
